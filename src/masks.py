@@ -5,13 +5,11 @@ def get_mask_card_number(card_number: str) -> str:
 
     card_number = str(card_number)
 
-    if card_number.isdigit():
-        if len(card_number) == 16:
-            mask_card_number = f"{card_number[:4]} {card_number[4:6]} ** **** {card_number[12:]}"
-            return mask_card_number
-        return "Введен некорректный номер"
-    else:
-        raise ValueError("Введен некорректный номер")
+    if len(card_number) == 16:
+        mask_card_number = f"{card_number[:4]} {card_number[4:6]} ** **** {card_number[12:]}"
+        return mask_card_number
+
+    return "Введен некорректный номер"
 
 
 if __name__ == "__main__":
