@@ -26,7 +26,7 @@ def test_log_cupsys(capsys):
         )
 
 
-# Проверка декоратора на вывод в консоль
+#Проверка декоратора на вывод в консоль
 
 
 def test_log_without_filename(capsys):
