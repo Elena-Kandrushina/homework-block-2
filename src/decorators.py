@@ -23,15 +23,16 @@ def log(filename=None):
                     # print(f'"Конец работы": {end_work_func}')
 
             except Exception as e:
+                # Логируем ошибку
+                error_msg = f"{func.__name__} error: {type(e).__name__}: {e}. Inputs: {args}, {kwargs}"
                 if filename:
                     with open(filename, "a", encoding="utf-8") as file:
-                        file.write(f"{func.__name__} error: {type(e).__name__}: {e}. Inputs: {args}, {kwargs}")
-
+                        file.write(error_msg)
                 else:
-                    print(f"{func.__name__} error: {type(e).__name__}: {e}. Inputs: {args}, {kwargs}")
-
+                    print(error_msg)
+                # Пробрасываем исключение дальше
+                raise
         return wrapper
-
     return inner
 
 
