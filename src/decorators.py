@@ -32,7 +32,9 @@ def log(filename=None):
                     print(error_msg)
                 # Пробрасываем исключение дальше
                 raise
+
         return wrapper
+
     return inner
 
 
