@@ -20,7 +20,10 @@ def test_log_cupsys(capsys):
     with pytest.raises(TypeError):
         my_function()
         captured = capsys.readouterr()
-        assert "my_function error: TypeError: my_function() missing 2 required positional arguments: 'x' and 'y'. Inputs: (), {}" in captured.out
+        assert (
+            "my_function error: TypeError: my_function() missing 2 required positional arguments:"
+            " 'x' and 'y'. Inputs: (), {}" in captured.out
+        )
 
 
 # Проверка декоратора на вывод в консоль
