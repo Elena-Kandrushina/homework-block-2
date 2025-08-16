@@ -17,10 +17,10 @@ def test_my_function_success(capsys):
 
 # Тестирование декоратора log - обработка ошибок
 def test_log_cupsys(capsys):
-    with pytest.raises(Exception):
-        my_func = my_function()
-        captured = my_func.readouterr()
-        assert captured.out == Exception
+    with pytest.raises(TypeError):
+        my_function()
+        captured = capsys.readouterr()
+        assert "my_function error: TypeError: my_function() missing 2 required positional arguments: 'x' and 'y'. Inputs: (), {}" in captured.out
 
 
 # Проверка декоратора на вывод в консоль
