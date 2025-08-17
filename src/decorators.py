@@ -4,7 +4,7 @@ from time import perf_counter
 
 def log(filename=None):
     """Декоратор log, который автоматически записывает в лог начало и конец выполнения функции,
-    а также ее результаты или возникающие ошибки"""
+    а также ее результаты или возникшие ошибки"""
 
     def inner(func):
         @wraps(func)
@@ -30,7 +30,6 @@ def log(filename=None):
                         file.write(error_msg)
                 else:
                     print(error_msg)
-                # Пробрасываем исключение дальше
                 raise
 
         return wrapper
@@ -43,7 +42,10 @@ def my_function(x, y):
     return x + y
 
 
-my_function(1, 2)
+try:
+    my_function()  # Вызовет TypeError и декоратор его обработает
+except Exception as e:
+    print(f"Выявлено исключение в основном коде: {e}")
 
 
 @log(filename="")
@@ -51,4 +53,7 @@ def my_function_mult(x, y):
     return x * y
 
 
-my_function_mult(3, 2)
+try:
+    my_function_mult()  # Вызовет TypeError и декоратор его обработает
+except Exception as e:
+    print(f"Выявлено исключение в основном коде: {e}")
