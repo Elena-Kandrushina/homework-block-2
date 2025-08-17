@@ -1,0 +1,3 @@
+
+ my_function ok. Результат : 3 
+ my_function_mult ok. Результат : 6 

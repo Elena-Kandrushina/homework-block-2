@@ -4,6 +4,7 @@ from src.generators import filter_by_currency, transaction_descriptions, card_nu
 
 from collections.abc import Generator as ABCGenerator
 
+
 # Фикстура с тестовыми данными
 @pytest.fixture
 def sample_transactions():
@@ -37,6 +38,7 @@ def sample_transactions():
         },
     ]
 
+
 # Тесты для filter_by_currency
 @pytest.mark.parametrize("currency,expected_count", [("USD", 2), ("RUB", 1), ("EUR", 0)])
 def test_filter_by_currency(sample_transactions, currency, expected_count):
@@ -48,12 +50,11 @@ def test_filter_by_currency(sample_transactions, currency, expected_count):
     for transaction in result:
         assert transaction["operationAmount"]["currency"]["code"] == currency
 
+
 # Тесты для transaction_descriptions
-@pytest.mark.parametrize("index,expected", [
-    (0, "Перевод организации"),
-    (1, "Перевод со счета на счет"),
-    (2, "Перевод со счета на счет")
-])
+@pytest.mark.parametrize(
+    "index,expected", [(0, "Перевод организации"), (1, "Перевод со счета на счет"), (2, "Перевод со счета на счет")]
+)
 def test_transaction_descriptions(sample_transactions, index, expected):
     """Тестируем генератор описаний транзакций"""
     gen = transaction_descriptions(sample_transactions)
@@ -61,13 +62,16 @@ def test_transaction_descriptions(sample_transactions, index, expected):
     descriptions = list(gen)
     assert descriptions[index] == expected
 
-@pytest.mark.parametrize("start,stop,expected", [
-    (1, 5, ["0000 0000 0000 0001", "0000 0000 0000 0002",
-             "0000 0000 0000 0003", "0000 0000 0000 0004"]),
-    (9999, 10001, ["0000 0000 0000 9999", "0000 0000 0001 0000"]),
-    (1, 1, []),
-    (9999999999999999, 10000000000000000, ["9999 9999 9999 9999"])
-])
+
+@pytest.mark.parametrize(
+    "start,stop,expected",
+    [
+        (1, 5, ["0000 0000 0000 0001", "0000 0000 0000 0002", "0000 0000 0000 0003", "0000 0000 0000 0004"]),
+        (9999, 10001, ["0000 0000 0000 9999", "0000 0000 0001 0000"]),
+        (1, 1, []),
+        (9999999999999999, 10000000000000000, ["9999 9999 9999 9999"]),
+    ],
+)
 def test_card_number_generator(start, stop, expected):
     """Тестируем генератор номеров карт"""
     gen = card_number_generator(start, stop)
