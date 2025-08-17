@@ -27,8 +27,8 @@ if __name__ == "__main__":
 
 def sort_by_date(date_list_dict: list, date_key: str = "date", descending: bool = True) -> list:
     """Функция принимает список словарей и необязательный параметр, задающий порядок сортировки
-    (по умолчанию — убывание). Функция должна возвращать новый список, отсортированный по
-     дате (date)"""
+    (по умолчанию — убывание). Функция должна возвращать отсортированный по
+     дате (date) список """
     sorted_list_dict = sorted(date_list_dict, key=lambda x: datetime.strptime(x["date"], "%Y-%m-%dT%H:%M:%S.%f"))
     return sorted_list_dict
 

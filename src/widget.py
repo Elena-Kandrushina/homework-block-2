@@ -3,7 +3,7 @@ from src.masks import get_mask_account, get_mask_card_number
 
 def mask_account_card(account_card: str) -> str:
     """Функция принимает аргумент — строку, содержащую тип и номер карты или счета и
-    возвращает строку с замаскированным номером"""
+    возвращает строку с маской-номером"""
     if "Счет" in account_card:
         mask_account = f"{account_card[:4]}"
         mask_card = f"{account_card[-5:-1]}"
