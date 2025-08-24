@@ -37,7 +37,7 @@ def log(filename=None):
     return inner
 
 
-@log(filename="")
+@log(filename="mylog.txt")
 def my_function(x, y):
     return x + y
 

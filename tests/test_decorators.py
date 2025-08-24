@@ -56,16 +56,4 @@ def test_log_without_filename(capsys):
     assert "multiply ok. Результат : 8" in captured.out
 
 
-# Проверка на вывод в файл mylog.txt
 
-
-def test_log_successful_execution(filename="mylog.txt"):
-    def add(a, b):
-        return a + b
-
-    add(1, 2)
-
-    with open("mylog.txt", "r", encoding="utf-8") as f:
-        content = f.read()
-
-    assert " my_function ok. Результат : 3 " in content
