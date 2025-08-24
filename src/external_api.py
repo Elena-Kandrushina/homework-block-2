@@ -41,7 +41,7 @@ def rub_convert_transaction(transaction: Dict[str, Any]) -> float:
         print(f"Ошибка при конвертации: {e}")
 
 
-transactions = load_json_file("E:/lessons/homework/data/operations.json")
+transactions = load_json_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json"))
 for transaction in transactions:
     amount = rub_convert_transaction(transaction)
     print(f"Транзакция: {amount} RUB")

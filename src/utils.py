@@ -1,3 +1,4 @@
+import os
 import json
 from typing import List, Dict, Any
 
@@ -21,6 +22,6 @@ def load_json_file(file_path: str) -> List[Dict[str, Any]]:
         return []
 
 
-result = load_json_file("E:/lessons/homework/data/operations.json")
+result = load_json_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json"))
 
 print(result)
