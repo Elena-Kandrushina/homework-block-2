@@ -39,9 +39,9 @@ def test_rub_convert_transaction_api_key():
 def test_rub_convert_transaction_3(mock_get):
 
     mock_get.return_value.status_code = 200
-    mock_get.return_value.json.return_value = {"result": 75.0}
+    mock_get.return_value.json.return_value = {"result": 2575847.803257}
 
-    transaction = [{"operationAmount": {"amount": "1", "currency": {"code": "USD"}}}]
+    transaction = [{"operationAmount": {"amount": "31957.58", "currency": {"code": "USD"}}}]
 
     result = rub_convert_transaction(transaction)
-    assert result, 75.0
+    assert (result, 2575847.803257)
