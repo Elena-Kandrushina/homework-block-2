@@ -54,6 +54,3 @@ def test_log_without_filename(capsys):
 
     captured = capsys.readouterr()
     assert "multiply ok. Результат : 8" in captured.out
-
-
-
