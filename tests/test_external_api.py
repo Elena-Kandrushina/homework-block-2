@@ -18,16 +18,14 @@ def test_rub_convert_transaction_mock():
     mock_response.status_code = 200
     mock_response.text = '{"result": 100}'
 
-    with patch("requests.request", return_value=mock_response):
+    with patch("requests.get", return_value=mock_response):
         result = rub_convert_transaction(transaction)
 
         assert result == 100.0
 
 
 def test_rub_convert_transaction_api_key():
-    # Тестируем ситуацию, когда переменная окружения API_KEY отсутствует
 
-    # Удаляем переменную окружения перед вызовом функции
     del os.environ["API_KEY"]
 
     transaction = {"operationAmount": {"amount": "50", "currency": {"code": "USD"}}}
@@ -35,3 +33,15 @@ def test_rub_convert_transaction_api_key():
     result = rub_convert_transaction(transaction)
 
     assert result is None
+
+
+@patch("requests.get")
+def test_rub_convert_transaction_3(mock_get):
+
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.json.return_value = {"result": 75.0}
+
+    transaction = [{"operationAmount": {"amount": "1", "currency": {"code": "USD"}}}]
+
+    result = rub_convert_transaction(transaction)
+    assert result, 75.0
