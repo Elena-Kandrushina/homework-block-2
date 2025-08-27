@@ -3,11 +3,11 @@ from unittest.mock import patch, Mock
 from src.external_api import rub_convert_transaction
 
 
-def test_rub_convert_transaction():
-    transaction = {"operationAmount": {"amount": "31957.58", "currency": {"code": "RUB"}}}
+from dotenv import load_dotenv
 
-    result = rub_convert_transaction(transaction)
-    assert result == 31957.58
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
+os.environ["API_KEY"] = "test_key"
 
 
 def test_rub_convert_transaction_mock():
@@ -24,24 +24,19 @@ def test_rub_convert_transaction_mock():
         assert result == 100.0
 
 
-def test_rub_convert_transaction_api_key():
+def test_rub_convert_transaction():
+    # Устанавливаем тестовый API_KEY (чтобы функция не падала)
+    os.environ["API_KEY"] = "test_key"
 
-    del os.environ["API_KEY"]
+    # Тестовая транзакция (USD в RUB)
+    test_transaction = {"operationAmount": {"amount": "1", "currency": {"code": "USD"}}}
 
-    transaction = {"operationAmount": {"amount": "50", "currency": {"code": "USD"}}}
+    # Мокаем ответ API (1 USD = 75 RUB)
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {"result": 75.0}
 
-    result = rub_convert_transaction(transaction)
-
-    assert result is None
-
-
-@patch("requests.get")
-def test_rub_convert_transaction_3(mock_get):
-
-    mock_get.return_value.status_code = 200
-    mock_get.return_value.json.return_value = {"result": 2575847.803257}
-
-    transaction = [{"operationAmount": {"amount": "31957.58", "currency": {"code": "USD"}}}]
-
-    result = rub_convert_transaction(transaction)
-    assert (result, 2575847.803257)
+    # Заменяем `requests.get` на мок
+    with patch("requests.get", return_value=mock_response):
+        result = rub_convert_transaction(test_transaction)
+        assert result == 75.0

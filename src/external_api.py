@@ -4,43 +4,43 @@ from typing import Dict, Any
 from dotenv import load_dotenv
 
 # from src.utils import load_json_file
-import json
+# import json
 
 load_dotenv()
 
 
 def rub_convert_transaction(transaction: Dict[str, Any]) -> float:
-    """Функция осуществляет конвертацию суммы транзакции в рубли"""
+    """Конвертирует сумму транзакции в рубли."""
     try:
         API_KEY = os.getenv("API_KEY")
         if not API_KEY:
-            raise ValueError("API ключ не найден")
-        amount = float(transaction.get("operationAmount", {}).get("amount", 0))
-        currency = transaction.get("operationAmount", {}).get("currency", {}).get("code", {})
-        to = "RUB"
+            raise ValueError("API_KEY не найден!")
 
-        url = f"https://api.apilayer.com/exchangerates_data/convert?to={to}&from={currency}&amount={amount}"
+        # Получаем сумму и валюту
+        operation_amount = transaction.get("operationAmount", {})
+        amount = float(operation_amount.get("amount", 0))
+        currency = operation_amount.get("currency", {}).get("code", "").upper()
 
-        payload = {}
-        headers = {"apikey": API_KEY}
-        if currency == "USD":
-            response = requests.request("GET", url, headers=headers, data=payload)
-            status_code = response.status_code
-            result = response.text
-
-            if status_code == 200:
-                python_response = json.loads(result)
-
-                return float(python_response.get("result", 0))
-            else:
-                print(f"Ошибка API: {response.status_code}")
-                return amount
-
-        else:
+        # Если валюта уже RUB, возвращаем сумму без конвертации
+        if currency == "RUB":
             return amount
 
+        # Конвертируем только USD и EUR
+        if currency in ("USD", "EUR"):
+            url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={currency}&amount={amount}"
+            headers = {"apikey": API_KEY}
+
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()  # Проверяем статус ответа
+
+            result = response.json().get("result", amount)
+            return float(result) if result else amount
+
+        return amount  # Если валюта не USD/EUR, возвращаем исходную сумму
+
     except Exception as e:
-        print(f"Ошибка при конвертации: {e}")
+        print(f"Ошибка конвертации: {e}")
+        return amount  # При ошибке возвращаем исходную сумму
 
 
 print(
