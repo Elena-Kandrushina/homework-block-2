@@ -19,8 +19,8 @@ def mask_account_card(account_card: str) -> str:
         return mask_account_card
 
 
-if __name__ == "__main__":
-    print(mask_account_card("Счет 73654108430135874305"))
+# if __name__ == "__main__":
+#     print(mask_account_card("Счет 73654108430135874305"))
 
 
 def get_date(date_t02: str) -> str:
@@ -33,5 +33,5 @@ def get_date(date_t02: str) -> str:
     return date_2
 
 
-if __name__ == "__main__":
-    print(get_date("2025-07-20T02:26:18.671407"))
+# if __name__ == "__main__":
+#     print(get_date("2025-07-20T02:26:18.671407"))

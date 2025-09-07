@@ -20,7 +20,7 @@ def load_csv_file(file_path: str) -> List[Dict[str, Any]]:
 
 
 result = load_csv_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "transactions.csv"))
-print(result)
+# print(result)
 
 
 def load_exel_file(file_path: str) -> List[Dict[str, Any]]:
@@ -32,4 +32,4 @@ def load_exel_file(file_path: str) -> List[Dict[str, Any]]:
     return dataframe.to_dict("records")
 
 
-print(load_exel_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "transactions_excel.xlsx")))
+# print(load_exel_file(os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "transactions_excel.xlsx")))
