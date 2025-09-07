@@ -1,5 +1,5 @@
 from functools import wraps
-from time import perf_counter
+# from time import perf_counter
 
 
 def log(filename=None):
@@ -10,9 +10,9 @@ def log(filename=None):
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
-                begin = perf_counter()
+                # begin = perf_counter()
                 result = func(*args, **kwargs)
-                end_work_func = perf_counter()
+                # end_work_func = perf_counter()
                 if filename:
                     with open(filename, "a", encoding="utf-8") as file:
                         file.write(f" {func.__name__} ok. Результат : {result} ")
