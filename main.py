@@ -4,6 +4,7 @@ from src.utils_csv import load_csv_file, load_exel_file
 from src.searching import process_bank_search
 from src.generators import filter_by_currency
 from src.widget import mask_account_card
+import os
 
 
 def main():
@@ -13,21 +14,22 @@ def main():
     print("1. Получить информацию о транзакциях из JSON-файла")
     print("2. Получить информацию о транзакциях из CSV-файла")
     print("3. Получить информацию о транзакциях из XLSX-файла")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
 
     while True:
         choice = input("Пользователь: ").strip()
         if choice == "1":
             print("Для обработки выбран JSON-файл.")
-            transactions = load_json_file("E:/lessons/homework/data/operations.json")
+            transactions = load_json_file(os.path.join(base_dir, "data/operations.json"))
 
             break
         elif choice == "2":
             print("Для обработки выбран CSV-файл.")
-            transactions = load_csv_file("E:/lessons/homework/data/transactions.csv")
+            transactions = load_csv_file(os.path.join(base_dir, "data/transactions.csv"))
             break
         elif choice == "3":
             print("Для обработки выбран XLSX-файл.")
-            transactions = load_exel_file("E:/lessons/homework/data/transactions_excel.xlsx")
+            transactions = load_exel_file(os.path.join(base_dir, "data/transactions_excel.xlsx"))
             break
         else:
             print("Некорректный выбор. Пожалуйста, выберите 1, 2 или 3.")
