@@ -38,8 +38,8 @@ def main():
     while True:
         print("Введите статус, по которому необходимо выполнить фильтрацию.")
         print(f'Доступные для фильтрации статусы: {", ".join(valid_statuses)}')
-        status_input = input("Пользователь: ").strip()
-        if status_input.upper() in valid_statuses:
+        status_input = input("Пользователь: ").strip().upper()
+        if status_input in valid_statuses:
             print(f'Операции отфильтрованы по статусу "{status_input.upper()}"')
             transactions = filter_by_state(transactions, status_input)
             break
@@ -93,18 +93,14 @@ def main():
         transactions = process_bank_search(transactions, keyword)
         filtered_transactions = []
         for transaction in transactions:
-            if "operationAmount" in transaction and "description" in transaction["operationAmount"]:
-                curr_code = transaction["operationAmount"]["description"].get("from")
-                masked_code = mask_account_card(curr_code)
-                transaction["operationAmount"]["description"]["from"] = masked_code
-                curr_code_1 = transaction["operationAmount"]["description"].get("to")
-                masked_code = mask_account_card(curr_code_1)
-                transaction["operationAmount"]["description"]["to"] = masked_code
-            elif "from" and "to" in transaction:
-                curr_code = transaction.get("from")
-                masked_code = mask_account_card(curr_code)
-                transaction["from"] = masked_code
-                transaction["to"] = masked_code
+
+            from_value = transaction.get("from")  # тут я проверила пустое ли поле from в файлах
+            if from_value:
+                transaction["from"] = mask_account_card(from_value)
+
+            to_value = transaction.get("to")
+            if to_value:
+                transaction["to"] = mask_account_card(to_value)
 
             filtered_transactions.append(transaction)
 
