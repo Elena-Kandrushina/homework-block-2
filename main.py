@@ -5,6 +5,8 @@ from src.searching import process_bank_search
 from src.generators import filter_by_currency
 from src.widget import mask_account_card
 import os
+from datetime import datetime
+import pandas as pd
 
 
 def main():
@@ -56,15 +58,12 @@ def main():
             print('Пожалуйста, введите "Да" или "Нет".')
 
     if sort_answer == "да":
-        while True:
-            print("Отсортировать по возрастанию или по убыванию?")
-            order = input("Пользователь: ").strip().lower()
-            if order in ["по возрастанию", "по убыванию"]:
-                descending = order == "по возрастанию"
-                transactions = sort_by_date(transactions, descending)
-                break
-            else:
-                print('Пожалуйста, введите "по возрастанию" или "по убыванию".')
+        print("Отсортировать по возрастанию или по убыванию?")
+        descending = input("Пользователь: ").strip().lower()
+        if descending == "по возрастанию":
+            transactions = sort_by_date(transactions, descending=False)
+        else:
+            transactions = sort_by_date(transactions, descending=True)
 
     # Фильтр по валюте
     while True:
@@ -93,13 +92,13 @@ def main():
         transactions = process_bank_search(transactions, keyword)
         filtered_transactions = []
         for transaction in transactions:
-
-            from_value = transaction.get("from")  # тут я проверила пустое ли поле from в файлах
-            if from_value:
+            from_value = transaction.get("from")
+            # для nan в XLSX-файле
+            if pd.notna(from_value):
                 transaction["from"] = mask_account_card(from_value)
 
             to_value = transaction.get("to")
-            if to_value:
+            if pd.notna(to_value):
                 transaction["to"] = mask_account_card(to_value)
 
             filtered_transactions.append(transaction)
@@ -110,8 +109,36 @@ def main():
         if transactions != []:
             print("Распечатываю итоговый список транзакций...\n")
             print(f"Всего банковских операций в выборке: {len(transactions)}")
+            for transaction in transactions:
 
-    return transactions
+                if "operationAmount" in transaction:
+                    date = transaction.get("date")
+                    dt = datetime.fromisoformat(date.replace("Z", "+00:00"))  # тут я отсекла часы,мин,сек и тд
+                    date_formatted = dt.strftime("%d.%m.%Y")
+                    description = transaction.get("description")
+                    from_account = transaction.get("from", "")
+                    to_account = transaction.get("to")
+                    amount = transaction["operationAmount"]["amount"]
+                    currency_code = transaction["operationAmount"].get("currency", {}).get("code")
+
+                else:
+                    date = transaction.get("date")
+                    dt = datetime.fromisoformat(date.replace("Z", "+00:00"))  # тут я отсекла часы,мин,сек и тд
+                    date_formatted = dt.strftime("%d.%m.%Y")
+                    description = transaction.get("description")
+                    from_account = transaction.get("from", "")
+                    to_account = transaction.get("to")
+                    amount = transaction["amount"]
+                    currency_code = transaction.get("currency_code")
+
+                print(f"{date_formatted} {description}")
+                if from_account and to_account:
+                    print(f"{from_account} -> {to_account}")
+                elif from_account:
+                    print(f"{from_account}")
+                print(f"Сумма: {amount} {currency_code} \n")  # каждая операция с новой через строку
+
+    return "Выборка завершена"  # сделала так, чтобы завершить выборку не None
 
 
 if __name__ == "__main__":

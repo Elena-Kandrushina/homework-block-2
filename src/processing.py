@@ -30,7 +30,7 @@ def sort_by_date(date_list_dict: list, date_key: str = "date", descending: bool 
     """Функция принимает список словарей и необязательный параметр, задающий порядок сортировки
     (по умолчанию — убывание). Функция должна возвращать отсортированный по
      дате (date) список """
-    sorted_list_dict = sorted(date_list_dict, key=lambda x: parser.isoparse(x["date"]))
+    sorted_list_dict = sorted(date_list_dict, key=lambda x: parser.isoparse(x[date_key]), reverse=descending)
     return sorted_list_dict
 
 
