@@ -134,8 +134,8 @@ def main():
                 print(f"{date_formatted} {description}")
                 if from_account and to_account:
                     print(f"{from_account} -> {to_account}")
-                elif from_account:
-                    print(f"{from_account}")
+                elif to_account:
+                    print(f"{to_account}")
                 print(f"Сумма: {amount} {currency_code} \n")  # каждая операция с новой через строку
 
     return "Выборка завершена"  # сделала так, чтобы завершить выборку не None
