@@ -53,13 +53,22 @@ def filter_by_currency(transactions: list, currency: str) -> Iterator[dict]:
     """Функция, которая возвращает итератор, который поочередно выдает транзакции,
     где валюта операции соответствует заданной"""
     for transaction in transactions:
-        if transaction["operationAmount"]["currency"]["code"] == currency:
+        # Проверяем первый формат
+        if "operationAmount" in transaction and "currency" in transaction["operationAmount"]:
+            curr_code = transaction["operationAmount"]["currency"].get("code")
+        # Проверяем второй формат
+        elif "currency_code" in transaction:
+            curr_code = transaction.get("currency_code")
+        else:
+            curr_code = None
+
+        if curr_code == currency:
             yield transaction
 
 
 usd_transactions = filter_by_currency(transactions, "USD")
-for _ in range(2):
-    print(next(usd_transactions))
+# for _ in range(2):
+#     print(next(usd_transactions))
 
 
 def transaction_descriptions(transactions: list) -> Generator[str]:
@@ -69,8 +78,8 @@ def transaction_descriptions(transactions: list) -> Generator[str]:
 
 
 descriptions = transaction_descriptions(transactions)
-for _ in range(5):
-    print(next(descriptions))
+# for _ in range(5):
+#     print(next(descriptions))
 
 
 def card_number_generator(start: int, stop: int) -> Generator[str]:
@@ -82,5 +91,5 @@ def card_number_generator(start: int, stop: int) -> Generator[str]:
         yield f"{card_number[:4]} {card_number[4:8]} {card_number[8:12]} {card_number[12:]}"
 
 
-for card_number in card_number_generator(1, 5):
-    print(card_number)
+# for card_number in card_number_generator(1, 5):
+#     print(card_number)
